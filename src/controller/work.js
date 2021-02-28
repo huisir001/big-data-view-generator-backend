@@ -2,7 +2,7 @@
  * @Description: 作品控制
  * @Autor: HuiSir<273250950@qq.com>
  * @Date: 2021-02-28 20:51:04
- * @LastEditTime: 2021-02-28 23:02:26
+ * @LastEditTime: 2021-02-28 23:49:26
  */
 const { StaticFolderDir, ERR, RES } = require('../../config') //配置
 const { requireParamsStr } = require('../utils/myUtils') //工具
@@ -105,7 +105,7 @@ const Update = async (ctx) => {
     )
 
     if (serverStatus == 2) {
-        ctx.response.body = RES.succ('修改成功')
+        ctx.response.body = RES.succ('保存成功')
     } else {
         ctx.response.body = RES.fail()
     }
