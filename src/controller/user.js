@@ -2,7 +2,7 @@
  * @Description: 用户控制层
  * @Autor: HuiSir<273250950@qq.com>
  * @Date: 2020-11-09 09:59:34
- * @LastEditTime: 2021-02-26 14:19:45
+ * @LastEditTime: 2021-02-28 22:56:19
  */
 
 const { LOGIN_TIMEOUT, ERR, RES } = require('../../config') //配置
@@ -79,12 +79,7 @@ const Login = async (ctx) => {
         //这里将token存到redis(key为userid，value为token)
         //一个用户只有一条缓存，便于查询当前登陆用户数
         //注意配置失效时间
-        const saveToken = await redis.set(
-            res.id,
-            token,
-            'EX',
-            LOGIN_TIMEOUT
-        )
+        const saveToken = await redis.set(res.id, token, 'EX', LOGIN_TIMEOUT)
 
         //缓存成功则返回，否则报错
         if (saveToken == 'OK') {
@@ -101,16 +96,16 @@ const Login = async (ctx) => {
  * @description: 通过token获取用户信息
  * @return {*}
  */
-const GetUserInfo = async ctx=>{
-	//通过中间件的传值拿到用户信息，这里拷贝一下
-	const userInfo = JSON.parse(JSON.stringify(ctx.curUserInfo))
-	
-	//删除不需要的字段
-	delete userInfo.password
-	delete userInfo.loginTime
-	
-	//响应
-	ctx.response.body = RES.succ({ data: userInfo })
+const GetUserInfo = async (ctx) => {
+    //通过中间件的传值拿到用户信息，这里拷贝一下
+    const userInfo = JSON.parse(JSON.stringify(ctx.curUserInfo))
+
+    //删除不需要的字段
+    delete userInfo.password
+    delete userInfo.loginTime
+
+    //响应
+    ctx.response.body = RES.succ({ data: userInfo })
 }
 
 /**
@@ -254,7 +249,7 @@ const GetUserNum = async (ctx) => {
 module.exports = {
     Signup,
     Login,
-	GetUserInfo,
+    GetUserInfo,
     Logout,
     AllUser,
     ResetPass,

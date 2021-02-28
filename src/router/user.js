@@ -2,13 +2,13 @@
  * @Description: 用户接口层
  * @Autor: HuiSir<273250950@qq.com>
  * @Date: 2020-11-10 16:30:00
- * @LastEditTime: 2021-02-26 14:28:19
+ * @LastEditTime: 2021-02-28 22:45:01
  */
 const Router = require('@koa/router')
 const {
     Signup,
     Login,
-	GetUserInfo,
+    GetUserInfo,
     Logout,
     ResetPass,
     AllUser,

@@ -1,7 +1,7 @@
 {
-    "name": "koa-sql-cli",
+    "name": "big-data-view-generator-backend",
     "version": "1.0.0",
-    "description": "使用koa+mysql+redis开发NodeJS后端服务器",
+    "description": "大数据视图生成器后端程序",
     "main": "bin/www",
     "bin": "./bin/www",
     "scripts": {

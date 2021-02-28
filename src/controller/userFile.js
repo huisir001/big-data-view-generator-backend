@@ -2,7 +2,7 @@
  * @Description: 用户文件
  * @Autor: HuiSir<273250950@qq.com>
  * @Date: 2021-02-26 10:08:44
- * @LastEditTime: 2021-02-26 14:30:31
+ * @LastEditTime: 2021-02-28 22:59:16
  */
 const fs = require('fs')
 const { StaticFolderDir, ERR, RES } = require('../../config') //配置
