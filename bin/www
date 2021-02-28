@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+
+/**
+ * @author HuiSir q273250950
+ * @git https://gitee.com/huisir001/
+ * @blog http://www.zuifengyun.com/
+ */
+
+const app = require('../app')
+const { BASE_URL, PORT } = require('../config') //配置文件
+const { Print, Log } = require('../src/utils/logger') //日志
+
+//监听端口
+app.listen(PORT, () => {
+    //打印端口信息
+    Print.info(`端口监听成功：${BASE_URL}:${PORT}`)
+}).on('error', (err) => {
+    if (err.message.includes('already in use')) {
+        Log.error('端口被占用，请更改端口后重启程序 ' + err.message)
+    } else {
+        Log.error('端口监听失败，咨询管理员 ' + err.message)
+    }
+})

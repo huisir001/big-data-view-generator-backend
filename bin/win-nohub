@@ -1,0 +1,51 @@
+#!/usr/bin/env node
+
+/*
+ * @Description: windows 打包生成执行文件
+ * @Autor: HuiSir<273250950@qq.com>
+ * @Date: 2020-11-11 15:46:50
+ * @LastEditTime: 2020-11-11 16:41:57
+ */
+const fs = require('fs')
+
+//获取打包后的程序名
+const FileName =
+    process.env.npm_package_scripts_pkg_win
+        .split('dist/')[1]
+        .split('" "node')[0] + '.exe'
+
+const prefix = `Dim Wsh
+Set Wsh = WScript.CreateObject("WScript.shell")`
+
+const suffix = `'清内存
+Set Wsh = NoThing
+WScript.quit`
+
+const vbScriptStart = `${prefix}
+'后台执行
+Wsh.Run "${FileName}",0
+'弹出提示
+Msgbox "${FileName}程序后台执行成功！",VbOKOnly,"提示信息"
+${suffix}`
+
+const vbScriptClose = `${prefix}
+'后台执行
+Wsh.Run "taskkill /f /im ${FileName}",0
+'弹出提示
+Msgbox "${FileName}程序已关闭！",VbOKOnly,"提示信息"
+${suffix}`
+
+//写文件
+try{
+	fs.writeFileSync('dist/nohub.vbs', vbScriptStart, { encoding: 'ucs-2' })
+	fs.writeFileSync('dist/close.vbs', vbScriptClose, { encoding: 'ucs-2' })
+}catch(e){
+	// 判断是否有dist文件夹 若没有则创建文件夹
+	if(e.code=='ENOENT'){
+		fs.mkdirSync("dist")
+		fs.writeFileSync('dist/nohub.vbs', vbScriptStart, { encoding: 'ucs-2' })
+		fs.writeFileSync('dist/close.vbs', vbScriptClose, { encoding: 'ucs-2' })
+	}else{
+		console.error(e)
+	}
+}

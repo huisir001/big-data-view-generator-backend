@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+/*
+ * @Description: 生成conf.ini配置文件
+ * @Autor: HuiSir<273250950@qq.com>
+ * @Date: 2020-11-11 17:23:13
+ * @LastEditTime: 2021-02-25 18:37:21
+ */
+const fs = require('fs')
+const ini = require('ini')
+
+// 默认主配置项
+const MAIN_CONF = {
+    Main: {
+        port: 8888,
+        loginTimeout: 60 * 30,
+        staticFolderDir: 'resource', //静态资源文件夹路径,可为绝对路径,也可相对路径（上传的文件和一些静态资源保存在这里）
+    },
+    Database: {
+        host: '127.0.0.1',
+        port: 3306,
+        name: 'myDB', //数据库名
+        user: 'root', //此数据库账号(没有可为null)
+        pass: '', //数据库密码(没有可为null)
+    },
+    Redis: {
+        host: '127.0.0.1',
+        port: 6379,
+        pass: null,
+        DBIndex: 0,
+    },
+}
+
+// 写文件
+try {
+    fs.writeFileSync('dist/conf.ini', ini.stringify(MAIN_CONF))
+} catch (e) {
+    // 判断是否有dist文件夹 若没有则创建文件夹
+    if (e.code == 'ENOENT') {
+        fs.mkdirSync('dist')
+        fs.writeFileSync('dist/conf.ini', ini.stringify(MAIN_CONF))
+    } else {
+        console.error(e)
+    }
+}

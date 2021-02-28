@@ -1,0 +1,43 @@
+{
+    "name": "koa-sql-cli",
+    "version": "1.0.0",
+    "description": "使用koa+mysql+redis开发NodeJS后端服务器",
+    "main": "bin/www",
+    "bin": "./bin/www",
+    "scripts": {
+        "dev": "node bin/www --dev",
+        "pro-test": "node bin/www",
+        "pkg-win-dev": "pkg bin/pkg-dev -t win --output dist/app-dev",
+        "pkg-win": "concurrently \"pkg . -t win --output dist/app\" \"node bin/win-nohub\" \"node bin/conf-ini\" ",
+        "pkg-linux": "concurrently \"pkg . -t linux --output dist/app-linux\" \"node bin/conf-ini\" ",
+        "pkg-macos": "concurrently \"pkg . -t macos --output dist/app-macos\" \"node bin/conf-ini\" "
+    },
+    "pkg": {
+        "scripts": [],
+        "assets": []
+    },
+    "keywords": [
+        "koa",
+        "mysql"
+    ],
+    "author": "HuiSir <q273250950>",
+    "license": "ISC",
+    "dependencies": {
+        "@koa/router": "^10.0.0",
+        "archiver": "^5.2.0",
+        "ioredis": "^4.9.5",
+        "koa": "^2.7.0",
+        "koa-body": "^4.2.0",
+        "koa-send": "^5.0.1",
+        "koa2-cors": "^2.0.6",
+        "log4js": "^6.3.0"
+    },
+    "devDependencies": {
+        "concurrently": "^5.3.0",
+        "eslint": "^7.13.0",
+        "ini": "^1.3.5",
+        "mysql": "^2.18.1",
+        "pkg": "^4.4.9",
+        "prettier": "^2.1.2"
+    }
+}
