@@ -2,7 +2,7 @@
  * @Description: 作品表
  * @Autor: HuiSir<273250950@qq.com>
  * @Date: 2021-02-28 20:31:17
- * @LastEditTime: 2021-03-01 18:18:26
+ * @LastEditTime: 2021-03-01 23:00:58
  */
 const { DB: dbcfg } = require('../../config') //配置文件
 const Pool = require('./helper/mysql').getPool(dbcfg)

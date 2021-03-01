@@ -2,7 +2,7 @@
  * @Description: 项目配置
  * @Autor: HuiSir<273250950@qq.com>
  * @Date: 2020-11-08 23:25:42
- * @LastEditTime: 2021-02-25 21:07:21
+ * @LastEditTime: 2021-03-01 20:41:18
  */
 const fs = require('fs')
 const ini = require('ini')
@@ -62,7 +62,7 @@ module.exports = {
     DB: {
         host: DBHost || '127.0.0.1',
         port: DBPort || 3306,
-        database: DBName || 'big-data-view-generator', //数据库名
+        database: DBName || 'mydb', //数据库名
         user: DBUser || 'root',
         password: DBPass || 'gongxiaohui',
         connectionLimit: 200, //连接数限制

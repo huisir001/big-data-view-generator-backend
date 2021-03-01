@@ -2,7 +2,7 @@
  * @Description: 作品控制
  * @Autor: HuiSir<273250950@qq.com>
  * @Date: 2021-02-28 20:51:04
- * @LastEditTime: 2021-03-01 18:16:04
+ * @LastEditTime: 2021-03-01 23:01:12
  */
 const fs = require('fs')
 const path = require('path')
@@ -164,6 +164,39 @@ const FindById = async (ctx) => {
 }
 
 /**
+ * @description: 通过id复制单个作品
+ * @param {*} id
+ * @return {*}
+ * @author: HuiSir
+ */
+const CopyById = async (ctx) => {
+    const { id } = ctx.request.body
+
+    //必传项验证
+    const rPStr = requireParamsStr({ id })
+    if (rPStr) {
+        ERR.e200(rPStr)
+        return
+    }
+
+    // 查询
+    const res = await WorkModel.findOne({ id }, '-id -update_time -create_time')
+
+    // 复制
+    const copy = await WorkModel.create({ ...res })
+
+    if (copy.id) {
+        //返回结果
+        ctx.response.body = RES.succ({
+            msg: '复制成功',
+            data: copy,
+        })
+    } else {
+        ctx.response.body = RES.fail()
+    }
+}
+
+/**
  * @description: 通过用户id查询多个作品
  * @return {*}
  * @author: HuiSir
@@ -186,5 +219,6 @@ module.exports = {
     RemoveById,
     Update,
     FindById,
+    CopyById,
     FindByUserid,
 }

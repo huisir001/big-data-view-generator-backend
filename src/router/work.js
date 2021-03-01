@@ -2,7 +2,7 @@
  * @Description: 作品接口路由
  * @Autor: HuiSir<273250950@qq.com>
  * @Date: 2021-02-28 20:42:03
- * @LastEditTime: 2021-02-28 21:29:56
+ * @LastEditTime: 2021-03-01 23:00:48
  */
 
 const Router = require('@koa/router')
@@ -11,6 +11,7 @@ const {
     RemoveById,
     Update,
     FindById,
+    CopyById,
     FindByUserid,
 } = require('../controller/work')
 
@@ -22,6 +23,7 @@ router
     .post('/create', Create)
     .post('/removeById', RemoveById)
     .post('/update', Update)
+    .post('/copyById', CopyById)
     .get('/findById', FindById)
     .get('/findByUserid', FindByUserid)
 
