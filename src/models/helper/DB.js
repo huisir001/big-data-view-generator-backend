@@ -2,7 +2,7 @@
  * @Description: Mysql 查询封装
  * @Autor: HuiSir<273250950@qq.com>
  * @Date: 2021-02-22 17:07:10
- * @LastEditTime: 2021-02-26 12:53:40
+ * @LastEditTime: 2021-03-01 15:52:31
  */
 const { Log } = require('../../utils/logger') //日志
 const { v1: uuidv1 } = require('uuid')
@@ -86,6 +86,31 @@ class DB {
             }
         }
         return whereStrArr.join(joinStr)
+    }
+
+    /**
+     * @description: 将order by传值类似与`id age -update_time`形式的字符串转为query串
+     * @param {*} orderStr
+     * @return {*}
+     * @author: HuiSir
+     */
+    static sort2QueryStr(orderStr) {
+        if (!orderStr || orderStr.trim() == '') {
+            return ''
+        }
+
+        let orderArr = orderStr.split(' ')
+        const orderArr2 = orderArr.map((item) => {
+            //升降序，带-号为降序
+            let sortMark = 'ASC' //升序
+            if (item[0] == '-') {
+                item = item.slice(1)
+                sortMark = 'DESC'
+            }
+            return `${item} ${sortMark}`
+        })
+
+        return ' ORDER BY ' + orderArr2.join(',')
     }
 
     /**
@@ -180,16 +205,19 @@ class DB {
      * @param slot
      * @returns {Promise<any>}
      */
-    find(slot, filter = '') {
+    find(slot, filter = '', sort = '') {
         const { tableName, pool, schema } = this
+        const { fieldFilter, obj2whereStr, sort2QueryStr } = DB
         //返回字段过滤
-        const resFields = DB.fieldFilter(filter, schema)
+        const resFields = fieldFilter(filter, schema)
         //条件转义
-        const whereStr = DB.obj2whereStr(slot)
+        const whereStr = obj2whereStr(slot)
+        //升降序，带-号为降序
+        const sortQueryStr = sort2QueryStr(sort)
         return new Promise((resolve, reject) => {
             const sqlMod = `SELECT ${resFields} FROM ${tableName} ${
                 whereStr ? 'WHERE ' + whereStr : ''
-            }`
+            }${sortQueryStr}`
             pool.query(sqlMod, (error, results) => {
                 if (error) {
                     reject(error)

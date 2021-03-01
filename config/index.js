@@ -62,7 +62,7 @@ module.exports = {
     DB: {
         host: DBHost || '127.0.0.1',
         port: DBPort || 3306,
-        database: DBName || 'mydb', //数据库名
+        database: DBName || 'big-data-view-generator', //数据库名
         user: DBUser || 'root',
         password: DBPass || 'gongxiaohui',
         connectionLimit: 200, //连接数限制

@@ -27,7 +27,7 @@ module.exports = async (ctx, next) => {
     //获取请求头中的token
     const token = ctx.headers.token
     if (!token) {
-        //没有token直接阻断
+		ERR.e403()
         return
     }
 

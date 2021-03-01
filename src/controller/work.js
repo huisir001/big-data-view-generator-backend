@@ -2,10 +2,12 @@
  * @Description: 作品控制
  * @Autor: HuiSir<273250950@qq.com>
  * @Date: 2021-02-28 20:51:04
- * @LastEditTime: 2021-02-28 23:49:26
+ * @LastEditTime: 2021-03-01 18:16:04
  */
+const fs = require('fs')
+const path = require('path')
 const { StaticFolderDir, ERR, RES } = require('../../config') //配置
-const { requireParamsStr } = require('../utils/myUtils') //工具
+const { requireParamsStr, formatDate, makeDir } = require('../utils/myUtils') //工具
 const WorkModel = require('../models/Work')
 
 /**
@@ -85,23 +87,48 @@ const RemoveById = async (ctx) => {
  * @param {string} title
  * @param {jsonstring} page_options
  * @param {jsonstring} layers
+ * @param {base64String} screenshot
  * @return {*}
  * @author: HuiSir
  */
 const Update = async (ctx) => {
     const Parames = ctx.request.body
-    const { id, title, page_options, layers } = Parames
+    const { id, title, page_options, layers, screenshot } = Parames
 
     //必传项验证
-    const rPStr = requireParamsStr({ id, title, page_options, layers })
+    const rPStr = requireParamsStr({
+        id,
+        title,
+        page_options,
+        layers,
+        screenshot,
+    })
     if (rPStr) {
         ERR.e200(rPStr)
         return
     }
 
+    // 截屏文件处理
+    // 过滤data:URL前缀
+    const base64Data = screenshot.replace(/^data:image\/\w+;base64,/, '')
+    // 转为Buffer数据
+    const dataBuffer = Buffer.from(base64Data, 'base64')
+    // 文件路径
+    const filePath = `screenshot/${id}.${
+        screenshot.split(';base64')[0].split('/')[1]
+    }`
+    // 检查screenshot文件夹是否存在如果不存在则新建文件夹(同步创建)
+    makeDir(fs, path, path.join(`${StaticFolderDir}/screenshot/`))
+    // 写入文件
+    fs.writeFileSync(`${StaticFolderDir}/${filePath}`, dataBuffer)
+    // 写完回调
     const { serverStatus } = await WorkModel.update(
         { id }, //where
-        { ...Parames } //update
+        {
+            ...Parames,
+            screenshot: filePath,
+            update_time: formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss'), //更新时间
+        } //update
     )
 
     if (serverStatus == 2) {
@@ -118,7 +145,7 @@ const Update = async (ctx) => {
  * @author: HuiSir
  */
 const FindById = async (ctx) => {
-    const { id } = ctx.request.body
+    const { id } = ctx.request.query //get请求在query中取参
 
     //必传项验证
     const rPStr = requireParamsStr({ id })
@@ -138,7 +165,6 @@ const FindById = async (ctx) => {
 
 /**
  * @description: 通过用户id查询多个作品
- * @param {*} Create
  * @return {*}
  * @author: HuiSir
  */
@@ -146,7 +172,11 @@ const FindByUserid = async (ctx) => {
     //通过中间件的传值拿到token中的user信息
     const { id: userid } = ctx.curUserInfo
 
-    const findRes = await WorkModel.find({ userid })
+    const findRes = await WorkModel.find(
+        { userid },
+        '-layers -page_options',
+        '-update_time'
+    )
 
     ctx.response.body = RES.succ({ data: findRes })
 }

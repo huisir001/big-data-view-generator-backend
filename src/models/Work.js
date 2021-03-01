@@ -2,7 +2,7 @@
  * @Description: 作品表
  * @Autor: HuiSir<273250950@qq.com>
  * @Date: 2021-02-28 20:31:17
- * @LastEditTime: 2021-02-28 21:30:18
+ * @LastEditTime: 2021-03-01 18:18:26
  */
 const { DB: dbcfg } = require('../../config') //配置文件
 const Pool = require('./helper/mysql').getPool(dbcfg)
@@ -31,8 +31,7 @@ const WorkSchema = {
     },
     screenshot: {
         // 截图文件路径（相对于静态资源目录）
-        type: 'VARCHAR(50)',
-        default: "''",
+        type: 'VARCHAR(255)',
     },
     userid: {
         //关联用户
